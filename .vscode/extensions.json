@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "tamasfe.even-better-toml",
+    "golang.go",
+    "golang.go-nightly",
+    "usernamehw.errorlens",
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker",
+    "ariga.atlas-hcl",
+    "wayou.vscode-todo-highlight",
+    "emeraldwalk.runonsave",
+    "simonsiefke.svg-preview"
+  ]
+}
