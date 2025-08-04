@@ -1,0 +1,135 @@
+definitions:
+  request.UserReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  request.UserUpdateReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  response.UserRes:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/user:
+    get:
+      consumes:
+      - application/json
+      description: get list user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.UserRes'
+            type: array
+      summary: get list user
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: create user body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserRes'
+      summary: create user
+      tags:
+      - user
+  /v1/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete user by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: delete user by id
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: get user by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserRes'
+      summary: get user by id
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: update user
+      parameters:
+      - description: update user body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserUpdateReq'
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: update user
+      tags:
+      - user
+swagger: "2.0"

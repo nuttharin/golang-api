@@ -11,9 +11,9 @@ type UserRepository interface {
 	WithTx(txHandle *gorm.DB) UserRepository
 	List(ctx context.Context) (m *[]models.User, err error)
 	GetById(ctx context.Context, id uint) (m *models.User, err error)
-	Create(ctx context.Context, data *models.User) (m *models.User, err error)
+	Create(ctx context.Context, data *models.User) (*models.User, error)
 	DeleteById(ctx context.Context, id uint) error
-	UpdateById(ctx context.Context, id uint, m *models.User) error
+	UpdateById(ctx context.Context, id uint, data *models.User) error
 }
 
 type userRepo struct {
@@ -45,7 +45,7 @@ func (repo userRepo) GetById(ctx context.Context, id uint) (m *models.User, err 
 	return m, nil
 }
 
-func (repo userRepo) Create(ctx context.Context, data *models.User) (m *models.User, err error) {
+func (repo userRepo) Create(ctx context.Context, data *models.User) (*models.User, error) {
 	if err := repo.conn.WithContext(ctx).Create(&data).Error; err != nil {
 		return nil, err
 	}
@@ -59,11 +59,12 @@ func (repo userRepo) DeleteById(ctx context.Context, id uint) error {
 		return err
 	}
 
-	return repo.conn.WithContext(ctx).Where("id = ?", id).Delete(&models.User{}).Error
+	// Note :  Unscoped() = Hard Delete
+	return repo.conn.WithContext(ctx).Where("id = ?", id).Unscoped().Delete(&models.User{}).Error
 }
 
-func (repo userRepo) UpdateById(ctx context.Context, id uint, m *models.User) error {
-	if err := repo.conn.WithContext(ctx).Model(models.User{}).Where("id = ? ", id).Updates(&m).Error; err != nil {
+func (repo userRepo) UpdateById(ctx context.Context, id uint, data *models.User) error {
+	if err := repo.conn.WithContext(ctx).Model(models.User{}).Where("id = ? ", id).Updates(&data).Error; err != nil {
 		return err
 	}
 

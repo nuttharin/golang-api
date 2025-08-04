@@ -18,4 +18,6 @@ type UserService interface {
 		ctx context.Context,
 	) (*[]models.User, error)
 	Create(ctx context.Context, data request.UserReq) (*models.User, error)
+	Delete(ctx context.Context, id uint) error
+	Update(ctx context.Context, id uint, data request.UserUpdateReq) error
 }

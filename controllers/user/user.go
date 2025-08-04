@@ -4,9 +4,9 @@ import (
 	"golang-api/httpserver"
 	"golang-api/pkg/utils"
 	"golang-api/services/entities/request"
+	"golang-api/services/entities/response"
 
 	service_user "golang-api/services/user"
-	"log"
 	"net/http"
 
 	"gorm.io/gorm"
@@ -16,6 +16,8 @@ type UserController interface {
 	GetUser(ctx httpserver.Context)
 	List(ctx httpserver.Context)
 	CreateUser(ctx httpserver.Context)
+	UpdateUser(ctx httpserver.Context)
+	DeleteUser(ctx httpserver.Context)
 }
 
 type userCtrl struct {
@@ -28,8 +30,8 @@ type userCtrl struct {
 // @Router       /v1/user/{id} [get]
 // @Accept       json
 // @Produce      json
-// @Param        id  path  string  true  "id"
-// @Success      200	{object}  models.User
+// @Param        id  path  int  true  "id"
+// @Success      200	{object}  response.UserRes
 func (c *userCtrl) GetUser(ctx httpserver.Context) {
 	id, err := ctx.GetParamInt("id")
 	if err != nil {
@@ -37,15 +39,16 @@ func (c *userCtrl) GetUser(ctx httpserver.Context) {
 		return
 	}
 
-	log.Println(id)
-
 	user, err := c.userSvc.GetById(ctx.GetRequestCtx(), uint(id))
 	if err != nil {
 		httpserver.AttachError(ctx, err)
 		return
 	}
 
-	httpserver.Data(ctx, user)
+	httpserver.Data(ctx, response.UserRes{
+		User: *user,
+	})
+
 }
 
 // @Summary      get list user
@@ -54,7 +57,7 @@ func (c *userCtrl) GetUser(ctx httpserver.Context) {
 // @Router       /v1/user [get]
 // @Accept       json
 // @Produce      json
-// @Success      200	{object}  []models.User
+// @Success      200	{object}  []response.UserRes
 func (c *userCtrl) List(ctx httpserver.Context) {
 
 	user, err := c.userSvc.List(ctx.GetRequestCtx())
@@ -64,6 +67,7 @@ func (c *userCtrl) List(ctx httpserver.Context) {
 	}
 
 	httpserver.Data(ctx, user)
+
 }
 
 // @Summary      create user
@@ -98,6 +102,66 @@ func (c *userCtrl) CreateUser(ctx httpserver.Context) {
 		Code: http.StatusOK,
 		Data: data,
 	})
+}
+
+// @Summary      update user
+// @Description  update user
+// @Tags         user
+// @Router       /v1/user/{id} [patch]
+// @Accept       json
+// @Produce      json
+// @Param        request  body  request.UserUpdateReq  true "update user body"
+// @Param        id  path  int  true  "id"
+// @Success      200
+func (c *userCtrl) UpdateUser(ctx httpserver.Context) {
+	var r request.UserUpdateReq
+
+	id, err := ctx.GetParamInt("id")
+	if err != nil {
+		httpserver.AttachError(ctx, err)
+		return
+	}
+
+	if err := ctx.Bind(&r); err != nil {
+		httpserver.AttachError(ctx, err)
+		return
+	}
+
+	if err := utils.ValidateStruct(r); err != nil {
+		httpserver.AttachError(ctx, err)
+		return
+	}
+
+	txHandle, _ := ctx.Get("db_tx")
+	if err := c.userSvc.WithTx(txHandle.(*gorm.DB)).Update(ctx.GetRequestCtx(), uint(id), r); err != nil {
+		httpserver.AttachError(ctx, err)
+		return
+	}
+
+	httpserver.NotContent(ctx)
+}
+
+// @Summary      delete user by id
+// @Description  delete user by id
+// @Tags         user
+// @Router       /v1/user/{id} [delete]
+// @Accept       json
+// @Produce      json
+// @Param        id  path  int  true  "id"
+// @Success      201
+func (c *userCtrl) DeleteUser(ctx httpserver.Context) {
+	id, err := ctx.GetParamInt("id")
+	if err != nil {
+		httpserver.AttachError(ctx, err)
+		return
+	}
+
+	if err := c.userSvc.Delete(ctx.GetRequestCtx(), uint(id)); err != nil {
+		httpserver.AttachError(ctx, err)
+		return
+	}
+
+	httpserver.NotContent(ctx)
 }
 
 func NewCancelController(userSvc service_user.UserService) UserController {

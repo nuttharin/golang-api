@@ -14,7 +14,6 @@ type SuccessResponse struct {
 	Status  string      `json:"status"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
-	// Meta    *paginate.Meta `json:"meta,omitempty"`
 }
 
 type FailResponse struct {

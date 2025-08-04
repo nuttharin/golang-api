@@ -30,10 +30,9 @@ func Setup(route httpserver.Router,
 		user.GET("", userController.List)
 		user.GET("/:id", userController.GetUser)
 		user.POST("", httpserver.DbTransactionMiddleware(userController.CreateUser, db))
-		// user.DELETE("")
-		// user.PATCH("")
-		// user.POST("")
-		// user.PUT("")
+		user.DELETE("/:id", httpserver.DbTransactionMiddleware(userController.DeleteUser, db))
+		user.PATCH("/:id", httpserver.DbTransactionMiddleware(userController.UpdateUser, db))
+
 	}
 
 }

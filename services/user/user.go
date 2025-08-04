@@ -5,7 +5,6 @@ import (
 	"golang-api/repositories/models"
 	repository_user "golang-api/repositories/user"
 	"golang-api/services/entities/request"
-	"log"
 
 	"gorm.io/gorm"
 )
@@ -43,7 +42,6 @@ func (svc userSvc) List(
 }
 
 func (svc userSvc) Create(ctx context.Context, data request.UserReq) (*models.User, error) {
-	log.Println("userData svc")
 
 	// Build model
 	userData := models.User{
@@ -51,13 +49,32 @@ func (svc userSvc) Create(ctx context.Context, data request.UserReq) (*models.Us
 		Email: data.Email,
 	}
 
-	log.Println(userData)
 	user, err := svc.userRepo.Create(ctx, &userData)
 	if err != nil {
 		return nil, err
 	}
 
 	return user, nil
+}
+
+func (svc userSvc) Update(ctx context.Context, id uint, data request.UserUpdateReq) error {
+	userData := models.User{
+		Name:  data.Name,
+		Email: data.Email,
+	}
+
+	if err := svc.userRepo.UpdateById(ctx, id, &userData); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (svc userSvc) Delete(ctx context.Context, id uint) error {
+	if err := svc.userRepo.DeleteById(ctx, id); err != nil {
+		return err
+	}
+	return nil
 }
 
 func NewUserService(userRepo repository_user.UserRepository) UserService {
