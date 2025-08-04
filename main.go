@@ -4,12 +4,21 @@ import (
 	config "golang-api/configs"
 	"golang-api/database"
 	database_mysql "golang-api/database/mysql"
+	_ "golang-api/docs"
+
 	"golang-api/httpserver"
 	"golang-api/pkg/utils"
 	"golang-api/routes"
 	"log"
 )
 
+// @title [Golang-api] golang-arise-service
+// @version 1.0
+// @description golang-service of arise
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
 func main() {
 
 	config, err := config.LoadConfig("config.json")

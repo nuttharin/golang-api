@@ -7,14 +7,14 @@
   },
   "database": {
     "read": {
-      "host": "localhost",
+      "host": "mysql-db-1",
       "port": "3306",
       "user": "admin",
       "pass": "password",
       "name": "my_db"
     },
     "write": {
-      "host": "localhost",
+      "host": "mysql-db-1",
       "port": "3306",
       "user": "admin",
       "pass": "password",
