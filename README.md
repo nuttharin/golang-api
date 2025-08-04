@@ -1,27 +1,39 @@
-# golang-api
+# Golang-Api ( api(gin), gorm, mysql, swagger, docker )
 
-## Getting Started
-The project uses Docker to run the API service and MySQL database. Upon startup, the API performs automatic database migration and data seeding.
 
+## Features
+- RESTful API built with Gin (CRUD)
+- Database ORM with GORM
+- Auto DB migration
+- MySQL integration
+- Swagger documentation
+- Docker
+- Unit Test (Mockery)
+  
 ### Prerequisite
 Make sure you have the following installed on your system:
 - Docker
+- go
 
-### This api uses 
-- golang
-- Mysql
-- Unit Test (Mockery)
-- docker
 
 #### 1. Run Application
 ```bash
-# build docker
+# Run Docker Compose (API automatic database migration and data seeding)
 - docker-compose up --build
 
-
-# api run at
+# API Endpoints
 -  localhost:8001
+
+# Setup Swagger
+- go install github.com/swaggo/swag/cmd/swag@latest
+- swag init
+
+# Can change configuration
+- config.json
+
+# Unit-test (example user-service)
+- go test ./services/user
 ```
 
-####  Change Configuration
-- config.json
+####  Api Docs
+- your_url/swagger/index.html (localhost:8001/swagger/index.html) 
