@@ -36,4 +36,4 @@ Make sure you have the following installed on your system:
 ```
 
 ####  Api Docs
-- your_url/swagger/index.html (localhost:8001/swagger/index.html) 
+- your_url/swagger/index.html ( localhost:8001/swagger/index.html )
