@@ -1,20 +1,20 @@
 {
   "environment": "local",
   "server": {
-    "host": "127.0.0.1",
-    "port": "9005",
+    "host": "",
+    "port": "8001",
     "debug": "true"
   },
   "database": {
     "read": {
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": "3306",
       "user": "admin",
       "pass": "password",
       "name": "my_db"
     },
     "write": {
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": "3306",
       "user": "admin",
       "pass": "password",

@@ -1,6 +1,7 @@
 package controller_user
 
 import (
+	"errors"
 	"golang-api/httpserver"
 	"golang-api/pkg/utils"
 	"golang-api/services/entities/request"
@@ -41,6 +42,9 @@ func (c *userCtrl) GetUser(ctx httpserver.Context) {
 
 	user, err := c.userSvc.GetById(ctx.GetRequestCtx(), uint(id))
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			httpserver.NotFound(ctx, err.Error())
+		}
 		httpserver.AttachError(ctx, err)
 		return
 	}
@@ -134,6 +138,9 @@ func (c *userCtrl) UpdateUser(ctx httpserver.Context) {
 
 	txHandle, _ := ctx.Get("db_tx")
 	if err := c.userSvc.WithTx(txHandle.(*gorm.DB)).Update(ctx.GetRequestCtx(), uint(id), r); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			httpserver.NotFound(ctx, err.Error())
+		}
 		httpserver.AttachError(ctx, err)
 		return
 	}
@@ -157,6 +164,9 @@ func (c *userCtrl) DeleteUser(ctx httpserver.Context) {
 	}
 
 	if err := c.userSvc.Delete(ctx.GetRequestCtx(), uint(id)); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			httpserver.NotFound(ctx, err.Error())
+		}
 		httpserver.AttachError(ctx, err)
 		return
 	}

@@ -64,6 +64,12 @@ func (repo userRepo) DeleteById(ctx context.Context, id uint) error {
 }
 
 func (repo userRepo) UpdateById(ctx context.Context, id uint, data *models.User) error {
+
+	// Check have data
+	if _, err := repo.GetById(ctx, id); err != nil {
+		return err
+	}
+
 	if err := repo.conn.WithContext(ctx).Model(models.User{}).Where("id = ? ", id).Updates(&data).Error; err != nil {
 		return err
 	}

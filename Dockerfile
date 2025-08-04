@@ -1,10 +1,12 @@
-
-FROM golang:1.22-alpine
+FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
 COPY . .
+RUN go mod tidy
 
-RUN go build -o app
+RUN go build -o ./golang-api
 
-CMD ["./app"]
+EXPOSE 8001
+
+CMD ["./golang-api"]
