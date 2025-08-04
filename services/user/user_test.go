@@ -7,7 +7,6 @@ import (
 	"golang-api/repositories/models"
 	"golang-api/services/entities/request"
 	service_user "golang-api/services/user"
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -25,7 +24,6 @@ func TestUserService_GetById(t *testing.T) {
 		mockRepo.On("GetById", mock.Anything, uint(1)).Return(expected, nil)
 
 		user, err := svc.GetById(context.Background(), 1)
-		log.Println(user)
 		assert.NoError(t, err)
 		assert.Equal(t, expected, user)
 		mockRepo.AssertExpectations(t)

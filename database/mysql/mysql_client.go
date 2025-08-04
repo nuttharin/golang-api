@@ -3,7 +3,6 @@ package database_mysql
 import (
 	"fmt"
 	"golang-api/database"
-	"log"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -17,8 +16,6 @@ type MySQLDatabase struct {
 }
 
 func (m *MySQLDatabase) Connect(config database.DatabaseConnection) error {
-
-	log.Println(m.buildDBConnection(config.Write))
 
 	db, err := gorm.Open(mysql.Open(m.buildDBConnection(config.Write)))
 	if err != nil {
