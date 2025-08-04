@@ -19,8 +19,8 @@ Make sure you have the following installed on your system:
 - docker-compose up --build
 
 
-# api 
-- api run at localhost:8001
+# api run at
+-  localhost:8001
 ```
 
 ####  Change Configuration
