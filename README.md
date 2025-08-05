@@ -13,7 +13,6 @@
 ### Prerequisite
 Make sure you have the following installed on your system:
 - Docker
-- go
 
 
 #### 1. Run Application
